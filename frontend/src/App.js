@@ -1,161 +1,42 @@
-import './App.css';
-import ResponsiveDrawer from './MenuAppBar.js';
-import {TextField} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import "./App.css";
+import ResponsiveDrawer from "./components/MenuAppBar";
 import React from "react";
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDateTimePicker
-} from '@material-ui/pickers';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        width: '80vw',
-        marginLeft: '180px',
-        border: '1px solid white',
-
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: '60ch',
-    },
-    text: {
-        'font-size': 'calc(5px + 2vmin)',
-        marginLeft: '10px',
-        marginRight: '50px',
-        color: 'white',
-    },
-}));
-
-
+import "date-fns";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import CreateAppointmentScreen from "./screens/appointments/CreateAppointmentScreen";
+import AppointmentScreen from "./screens/appointments/AppointmentScreen";
+import DisplayAppointments from "./screens/appointments/DisplayAppointments";
+import AppointmentPreview from "./components/AppointmentPreview";
+import Appointment from "./components/Appointment";
 
 function App() {
-    const classes = useStyles();
-
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-    };
-
-    const [age, setAge] = React.useState('');
-
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
-
-
-    return (
-    <div className="App">
-      <header className="App-header">
-      <ResponsiveDrawer />
-        <p>
-          Kurs erstellen
-        </p>
-        <form className={classes.root} autoComplete="off">
-            <TextField
-                id="standard-full-width"
-                label="Label"
-                variant="outlined"
-                style={{ margin: 12 }}
-                fullWidth
-                margin="normal"
-            />
-            <TextField
-                id="standard-full-width"
-                label="Label"
-                variant="outlined"
-                style={{ margin: 12 }}
-                fullWidth
-                margin="normal"
-            />
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <p className={classes.text}>Beginn:</p>
-                <KeyboardDateTimePicker
-                    variant="inline"
-                    ampm={false}
-                    format="yyyy/MM/dd hh:mm a"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date picker inline"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                />
-                <p className={classes.text}>Ende:</p>
-                <KeyboardDateTimePicker
-                    variant="inline"
-                    ampm={false}
-                    format="yyyy/MM/dd hh:mm a"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date picker inline"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                />
-            </MuiPickersUtilsProvider>
-            <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
-                <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={age}
-                    onChange={handleChange}
-                    label="Age"
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
-            <TextField
-                id="standard-full-width"
-                label="Label"
-                variant="outlined"
-                style={{ margin: 12 }}
-                fullWidth
-                margin="normal"
-            />
-            <TextField
-                id="standard-full-width"
-                label="Label"
-                variant="outlined"
-                style={{ margin: 12 }}
-                fullWidth
-                margin="normal"
-                multiline
-                rows={5}
-            />
-            <TextField
-                id="standard-full-width"
-                label="Label"
-                variant="outlined"
-                style={{ margin: 12 }}
-                fullWidth
-                margin="normal"
-            />
-        </form>
-      </header>
-    </div>
-  );
+	return (
+		<Router>
+			<div className="App">
+				<header className="App-header">
+					<ResponsiveDrawer />
+					<Switch>
+						<Route
+							path="/appointments/display/:id"
+							strict
+							component={(props) => (
+								<Appointment id={props.match.params.id} />
+							)}
+						/>
+						<Route path="/appointments/create" strict>
+							<CreateAppointmentScreen />
+						</Route>
+						<Route path="/appointments/display" strict>
+							<DisplayAppointments />
+						</Route>
+						<Route path="/appointments" strict>
+							<AppointmentScreen />
+						</Route>
+					</Switch>
+				</header>
+			</div>
+		</Router>
+	);
 }
 
 export default App;
